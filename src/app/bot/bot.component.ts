@@ -19,13 +19,10 @@ import {
   TuiGroupModule,
   TuiModeModule,
   TuiScrollbarComponent,
-  TuiScrollbarModule, TuiSvgModule
-} from "@taiga-ui/core";
-import {
-  TuiCellModule,
-  TuiIconModule,
-  TuiTitleModule,
-} from '@taiga-ui/experimental';
+  TuiScrollbarModule,
+  TuiSvgModule,
+} from '@taiga-ui/core';
+import { TuiCellModule, TuiTitleModule } from '@taiga-ui/experimental';
 import { TuiInputModule } from '@taiga-ui/kit';
 import { BehaviorSubject, tap } from 'rxjs';
 

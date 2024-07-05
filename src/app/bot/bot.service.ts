@@ -14,7 +14,7 @@ export class BotService {
   private readonly commandMap = this.commands.reduce(
     (mapCommand: Record<string, BotCommand>, command: BotCommand) => {
       Object.assign(mapCommand, {
-        [command.command]: command,
+        [command.command.toLowerCase().replaceAll(/\?|!|\s/gi, '')]: command,
       });
 
       return mapCommand;
@@ -27,7 +27,10 @@ export class BotService {
   public inbox$ = this.INBOX$.pipe(debounceTime(1));
 
   public sendMessage(mgs: Message): void {
-    const trimMsg = mgs.message.trim();
+    const trimMsg = mgs.message
+      .trim()
+      .toLowerCase()
+      .replaceAll(/\?|!|\s/gi, '');
 
     if (this.commandMap[trimMsg]) {
       this.INBOX$.next({
