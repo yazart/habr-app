@@ -1,2 +1,2 @@
-# habr-app--
+# habr-app-🤖
 Application stupid 🤖
