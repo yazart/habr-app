@@ -1,0 +1,71 @@
+:host{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.chat {
+  display: flex;
+  flex-direction: column;
+  height: 80vh;
+  width: 100%;
+  max-width: 600px;
+  max-height: 80vh;
+  border: 1px solid var(--tui-neutral-bg-hover);
+   & header {
+     display: flex;
+     flex-direction: row;
+     height: 64px;
+     justify-content: start;
+     align-items: center;
+     gap: 20px;
+     padding-left: 20px;
+     border-bottom: 1px solid var(--tui-neutral-bg-hover);
+     & .divider {
+       display: flex;
+       width: 1px;
+       height: 30px;
+       background-color: var(--tui-neutral-bg-hover);
+     }
+
+   }
+  & .main{
+    height: calc(100% - 128px);
+    overflow-y: scroll;
+
+    & section:last-child {
+      margin-bottom: 150px;
+    }
+  }
+  & footer {
+    display: flex;
+    box-sizing: border-box;
+    flex-direction: row;
+    height: 84px;
+    width: 100%;
+    align-items: center;
+    padding: 0 20px;
+    border-top: 1px solid var(--tui-neutral-bg-hover);
+    & form {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+    }
+  }
+}
+
+.field-small {
+  min-height: 3.5rem;
+}
+
+.filler{
+  width: 100%;
+}
+
+@media screen and (max-width: 600px) {
+  .chat{
+    height: 100vh;
+    max-height: 100vh;
+  }
+}

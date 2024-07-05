@@ -1,0 +1,69 @@
+<div class="chat">
+<header>
+  <tui-icon [icon]="'tuiIconUser'"></tui-icon>
+  <div class="divider"></div>
+  <h2 tuiTitle="m">
+    Чат-бот
+  </h2>
+</header>
+<tui-scrollbar class="main">
+  @for (message of messages$ | async; track message.id){
+
+    @if(message.from === userName){
+      <section
+        [tuiCell]="'l'"
+      >
+        <div class="filler"></div>
+        <div tuiTitle>
+          {{ message.from }}
+          <div tuiSubtitle>{{message.message}}</div>
+        </div>
+        <tui-icon [icon]="'tuiIconUser'"></tui-icon>
+
+      </section>
+    }
+    @else {
+      <section
+        [tuiCell]="'l'"
+      >
+
+        <div tuiTitle>
+          {{ message.from }}
+          <div tuiSubtitle>{{message.message}}</div>
+        </div>
+        <tui-icon [icon]="'tuiIconUser'"></tui-icon>
+        <div class="filler"></div>
+      </section>
+    }
+
+
+  }
+
+</tui-scrollbar>
+  <footer>
+    <form [formGroup]="form" (submit)="send()">
+      <div
+        tuiGroup
+        class="group"
+        [collapsed]="true"
+      >
+        <tui-textarea
+          class="field-small"
+          [expandable]="false"
+          formControlName="message"
+        >
+          Сообщение
+        </tui-textarea>
+
+        <button
+          appearance="whiteblock"
+          tuiIconButton
+          type="submit"
+          icon="tuiIconSend"
+          class="tui-group__auto-width-item"
+        >
+        </button>
+      </div>
+    </form>
+  </footer>
+</div>
