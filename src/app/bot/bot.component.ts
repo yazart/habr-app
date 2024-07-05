@@ -19,8 +19,8 @@ import {
   TuiGroupModule,
   TuiModeModule,
   TuiScrollbarComponent,
-  TuiScrollbarModule,
-} from '@taiga-ui/core';
+  TuiScrollbarModule, TuiSvgModule
+} from "@taiga-ui/core";
 import {
   TuiCellModule,
   TuiIconModule,
@@ -43,7 +43,7 @@ import type { Message } from './message';
     NgForOf,
     AsyncPipe,
     TuiTitleModule,
-    TuiIconModule,
+    TuiSvgModule,
     TuiCellModule,
     TuiGroupModule,
     TuiModeModule,

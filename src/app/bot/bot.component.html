@@ -1,6 +1,6 @@
 <div class="chat">
 <header>
-  <tui-icon [icon]="'tuiIconMessageCircle'" />
+  <tui-svg src="tuiIconMessageCircle" />
   <div class="divider"></div>
   <h2 tuiTitle="m">
     Чат-бот
@@ -15,7 +15,7 @@
         [tuiCell]="'l'"
       >
         <div class="message-from">
-          <tui-icon [icon]="'tuiIconUser'" />
+          <tui-svg [src]="'tuiIconUser'" />
           <div tuiTitle class="tui-space_left-8">
             <div tuiSubtitle data-test-id="bot-message">{{message.message}}</div>
           </div>
@@ -33,7 +33,7 @@
           <div tuiTitle class="tui-space_right-8">
             <div tuiSubtitle data-test-id="user-message">{{message.message}}</div>
           </div>
-          <tui-icon [icon]="'tuiIconUser'" />
+          <tui-svg [src]="'tuiIconUser'" />
         </div>
 
       </section>
