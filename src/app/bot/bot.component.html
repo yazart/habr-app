@@ -50,8 +50,9 @@
         class="group"
         [collapsed]="true"
       >
-       <tui-input formControlName="message" data-test-id="chat-input">
+       <tui-input formControlName="message">
          Сообщение
+         <input tuiTextfield data-test-id="chat-input"/>
        </tui-input>
         <button
           appearance="whiteblock"
