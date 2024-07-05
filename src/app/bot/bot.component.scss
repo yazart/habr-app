@@ -10,43 +10,75 @@
   flex-direction: column;
   height: 80vh;
   width: 100%;
-  max-width: 600px;
+  max-width: 37.5rem;
   max-height: 80vh;
   border: 1px solid var(--tui-neutral-bg-hover);
+
    & header {
      display: flex;
      flex-direction: row;
-     height: 64px;
+     height: 4rem;
      justify-content: start;
      align-items: center;
-     gap: 20px;
-     padding-left: 20px;
+     gap: 1.25rem;
+     padding-left: 1.25rem;
      border-bottom: 1px solid var(--tui-neutral-bg-hover);
+
      & .divider {
        display: flex;
        width: 1px;
-       height: 30px;
+       height: 1.875rem;
        background-color: var(--tui-neutral-bg-hover);
      }
 
    }
+
   & .main{
-    height: calc(100% - 128px);
+    height: calc(100% - 8rem);
     overflow-y: scroll;
 
+    & .message-from,
+    & .message-to {
+      display: flex;
+      flex-direction: row;
+      gap: 16px;
+      justify-content: center;
+      align-items: center;
+      padding: 0.5rem;
+      border-radius: 16px;
+      max-width: 50%;
+      border: 1px solid var(--tui-neutral-bg-hover);
+    }
+
+    & .message-from {
+      border-bottom-left-radius: 0;
+      background-color: var(--tui-text-01);
+      color: var(--tui-text-01-night);
+
+      & [tuisubtitle] {
+        color: var(--tui-text-01-night);
+      }
+    }
+
+    & .message-to {
+      border-bottom-right-radius: 0;
+    }
+
     & section:last-child {
-      margin-bottom: 150px;
+      margin-bottom: 9.375rem;
     }
   }
+
   & footer {
     display: flex;
     box-sizing: border-box;
     flex-direction: row;
-    height: 84px;
+    height: 5.25rem;
     width: 100%;
     align-items: center;
-    padding: 0 20px;
+    padding: 0 1.25rem;
     border-top: 1px solid var(--tui-neutral-bg-hover);
+
     & form {
       display: flex;
       flex-direction: column;

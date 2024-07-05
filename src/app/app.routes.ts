@@ -5,6 +5,6 @@ export const routes: Routes = [
   {
     path: 'bot',
     loadComponent: async () =>
-      import('./bot/bot.component').then((c)=> c.BotComponent)
-  }
+      import('./bot/bot.component').then((c) => c.BotComponent),
+  },
 ];

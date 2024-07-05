@@ -1,56 +1,74 @@
-import {ChangeDetectionStrategy, Component, ElementRef, Inject, OnInit, ViewChild} from '@angular/core';
+import { AsyncPipe, NgForOf } from '@angular/common';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  DestroyRef,
+  ElementRef,
+  inject,
+  ViewChild,
+} from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import {
+  FormControl,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import {
   TuiButtonModule,
   TuiGroupModule,
   TuiModeModule,
-  TuiScrollbarComponent, TuiScrollbarModule,
-  TuiTextfieldControllerModule
-} from "@taiga-ui/core";
-import {TuiMobileDialogModule, TuiSheetDialogModule} from "@taiga-ui/addon-mobile";
-import {TuiAvatarModule, TuiInputComponent, TuiInputModule, TuiTextareaModule} from "@taiga-ui/kit";
-import {FormControl, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
+  TuiScrollbarComponent,
+  TuiScrollbarModule,
+} from '@taiga-ui/core';
 import {
-  TUI_DEFAULT_MATCHER,
-  TUI_WINDOW_SIZE,
-  TuiAutoFocusModule,
-  tuiControlValue,
-  TuiSwipeDirection,
-  TuiSwipeModule
-} from "@taiga-ui/cdk";
-import {AsyncPipe, NgForOf} from "@angular/common";
-import {BehaviorSubject, map, Observable} from "rxjs";
-import {TuiCellModule, TuiIconModule, TuiTitleModule} from "@taiga-ui/experimental";
+  TuiCellModule,
+  TuiIconModule,
+  TuiTitleModule,
+} from '@taiga-ui/experimental';
+import { TuiInputModule } from '@taiga-ui/kit';
+import { BehaviorSubject, tap } from 'rxjs';
+
+import { BotService } from './bot.service';
+import { BOT_COMMANDS } from './bot-commands.provider';
+import type { Message } from './message';
 
 @Component({
   standalone: true,
-  selector: 'bot',
-  templateUrl: './bot.component.html',
-  styleUrls: ['bot.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  selector: 'app-bot',
   imports: [
     TuiButtonModule,
-    TuiSheetDialogModule,
     TuiInputModule,
     ReactiveFormsModule,
-    TuiTextfieldControllerModule,
-    TuiSwipeModule,
-    TuiAvatarModule,
     NgForOf,
     AsyncPipe,
-    TuiMobileDialogModule,
     TuiTitleModule,
     TuiIconModule,
     TuiCellModule,
     TuiGroupModule,
-    TuiAutoFocusModule,
     TuiModeModule,
-    TuiTextareaModule,
-    TuiScrollbarModule
-  ]
+    TuiScrollbarModule,
+  ],
+  templateUrl: './bot.component.html',
+  styleUrls: ['./bot.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [BOT_COMMANDS, BotService],
 })
 export class BotComponent {
-  @ViewChild(TuiScrollbarComponent, {read: ElementRef})
+  @ViewChild(TuiScrollbarComponent, { read: ElementRef })
   private readonly scrollBar?: ElementRef<HTMLElement>;
+
+  private readonly destroyRef$ = inject(DestroyRef);
+  private readonly bot = inject(BotService);
+
+  private readonly inboxMessages = this.bot.inbox$
+    .pipe(
+      tap((message) => this.messages$.next([...this.messages$.value, message])),
+      takeUntilDestroyed(this.destroyRef$),
+    )
+    .subscribe(() => {
+      this.onMessage();
+    });
 
   public userName = 'User';
 
@@ -58,33 +76,37 @@ export class BotComponent {
     message: new FormControl<string>('', [Validators.required]),
   });
 
-  messages$ =  new BehaviorSubject([
-    {id: 1, name: 'Bot', from: 'Bot', to: 'User', message: 'Test1'},
-  ])
+  public messages$ = new BehaviorSubject<Message[]>([]);
 
-  send(){
+  public send(): void {
     this.form.updateValueAndValidity();
-    if(this.form.valid) {
+
+    if (this.form.valid) {
       const messages = this.messages$.value;
       const value = this.form.value;
+
       this.form.reset();
-      this.messages$.next([
-        ...messages,
-        {
-          id: (messages.at(-1)?.id || 0) + 1,
-          name: this.userName,
-          from: this.userName,
-          to: 'Bot',
-          message: value['message'] || '',
-        }
-      ]);
-      if (!this.scrollBar) {
-        return;
-      }
+      const message = {
+        id: (messages.at(-1)?.id || 0) + 1,
+        name: this.userName,
+        from: this.userName,
+        to: 'Bot',
+        message: value.message || '',
+      };
 
-      const {nativeElement} = this.scrollBar;
-
-      nativeElement.scrollTop = nativeElement.scrollHeight;
+      this.bot.sendMessage(message);
+      this.messages$.next([...messages, message]);
+      this.onMessage();
     }
+  }
+
+  private onMessage(): void {
+    if (!this.scrollBar) {
+      return;
+    }
+
+    const { nativeElement } = this.scrollBar;
+
+    nativeElement.scrollTop = nativeElement.scrollHeight;
   }
 }

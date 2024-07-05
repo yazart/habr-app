@@ -1,38 +1,41 @@
 <div class="chat">
 <header>
-  <tui-icon [icon]="'tuiIconUser'"></tui-icon>
+  <tui-icon [icon]="'tuiIconMessageCircle'" />
   <div class="divider"></div>
   <h2 tuiTitle="m">
     Чат-бот
   </h2>
 </header>
-<tui-scrollbar class="main">
+<tui-scrollbar class="main" data-test-id="message-area">
   @for (message of messages$ | async; track message.id){
 
-    @if(message.from === userName){
+    @if(message.from !== userName){
       <section
+
         [tuiCell]="'l'"
       >
-        <div class="filler"></div>
-        <div tuiTitle>
-          {{ message.from }}
-          <div tuiSubtitle>{{message.message}}</div>
+        <div class="message-from">
+          <tui-icon [icon]="'tuiIconUser'" />
+          <div tuiTitle class="tui-space_left-8">
+            <div tuiSubtitle data-test-id="bot-message">{{message.message}}</div>
+          </div>
         </div>
-        <tui-icon [icon]="'tuiIconUser'"></tui-icon>
-
+        <div class="filler"></div>
       </section>
     }
     @else {
       <section
+
         [tuiCell]="'l'"
       >
-
-        <div tuiTitle>
-          {{ message.from }}
-          <div tuiSubtitle>{{message.message}}</div>
-        </div>
-        <tui-icon [icon]="'tuiIconUser'"></tui-icon>
         <div class="filler"></div>
+        <div class="message-to">
+          <div tuiTitle class="tui-space_right-8">
+            <div tuiSubtitle data-test-id="user-message">{{message.message}}</div>
+          </div>
+          <tui-icon [icon]="'tuiIconUser'" />
+        </div>
+
       </section>
     }
 
@@ -41,23 +44,19 @@
 
 </tui-scrollbar>
   <footer>
-    <form [formGroup]="form" (submit)="send()">
+    <form [formGroup]="form" (ngSubmit)="send()">
       <div
         tuiGroup
         class="group"
         [collapsed]="true"
       >
-        <tui-textarea
-          class="field-small"
-          [expandable]="false"
-          formControlName="message"
-        >
-          Сообщение
-        </tui-textarea>
-
+       <tui-input formControlName="message" data-test-id="chat-input">
+         Сообщение
+       </tui-input>
         <button
           appearance="whiteblock"
           tuiIconButton
+          data-test-id="send-button"
           type="submit"
           icon="tuiIconSend"
           class="tui-group__auto-width-item"
